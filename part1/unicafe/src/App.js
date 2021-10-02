@@ -71,7 +71,6 @@ const App = () => {
   const [bad, setBad] = useState(0);
 
   const handleClick = rating => () => {
-    console.log('you clicked', rating);
     if (rating === 'good') {
       setGood(good + 1);
     } else if (rating === 'neutral') {
