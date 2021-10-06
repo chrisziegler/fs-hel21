@@ -10,4 +10,48 @@ body {
 h1,
 h2 {
   font-size: 1.6rem;
+  margin-bottom: 0.3em;
+}
+
+ul {
+  list-style: none;
+  line-height: 1.9;
+  padding: 0;
+}
+
+button.delete {
+  margin-left: 1em;
+  background: indianred;
+  color: white;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  position: relative;
+  top: -2px;
+}
+input {
+  margin-bottom: 0.5em;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+}
+
+form > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.list {
+  color: navy;
+  opacity: 1;
+}
+
+.list.fade {
+  opacity: 0;
+  transition: all 250ms linear 2s;
 }

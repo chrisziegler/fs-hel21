@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+
 import Filter from './components/Filter';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
+import personService from './services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -10,8 +11,8 @@ const App = () => {
   const [filter, setFilter] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons').then(response => {
-      setPersons(response.data);
+    personService.getAll().then(initialNumbers => {
+      setPersons(initialNumbers);
     });
   }, []);
 
@@ -24,6 +25,13 @@ const App = () => {
     setFilter(results);
   }, [searchTerm, persons]);
 
+  const handleDelete = ({ id, name }) => {
+    personService
+      .remove(id)
+      .then(window.confirm(`Delete ${name}?`));
+    setPersons(persons.filter(person => person.id !== id));
+  };
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -34,9 +42,15 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm persons={persons} setPersons={setPersons} />
       <h2>Numbers</h2>
-      {filter.map(person => (
-        <Persons key={person.name} person={person} />
-      ))}
+      <ul>
+        {filter.map(person => (
+          <Persons
+            key={person.name}
+            person={person}
+            handleDelete={handleDelete}
+          />
+        ))}
+      </ul>
     </div>
   );
 };
