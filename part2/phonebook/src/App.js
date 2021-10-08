@@ -5,10 +5,21 @@ import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
 import personService from './services/persons';
 
+const Notification = ({ successMessage, errorMessage }) => {
+  if (successMessage === null && errorMessage === null) {
+    return null;
+  } else if (errorMessage) {
+    return <div className="error">{errorMessage}</div>;
+  }
+  return <div className="successMessage">{successMessage}</div>;
+};
+
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState([]);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     personService.getAll().then(initialNumbers => {
@@ -35,12 +46,21 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification
+        successMessage={successMessage}
+        errorMessage={errorMessage}
+      />
       <Filter
         setSearchTerm={setSearchTerm}
         searchTerm={searchTerm}
       />
       <h2>add a new</h2>
-      <PersonForm persons={persons} setPersons={setPersons} />
+      <PersonForm
+        persons={persons}
+        setPersons={setPersons}
+        setSuccessMessage={setSuccessMessage}
+        setErrorMessage={setErrorMessage}
+      />
       <h2>Numbers</h2>
       <ul>
         {filter.map(person => (

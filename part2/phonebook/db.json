@@ -12,13 +12,8 @@
     },
     {
       "name": "Chris Ziegler",
-      "number": "206 321-0153",
+      "number": "123",
       "id": 5
-    },
-    {
-      "name": "Lasse",
-      "number": "555-1212",
-      "id": 6
     },
     {
       "name": "Jimi Hendrix",
@@ -26,24 +21,19 @@
       "id": 7
     },
     {
-      "name": "Bob",
-      "number": "3",
-      "id": 8
-    },
-    {
-      "name": "Jim",
-      "number": "1",
+      "name": "Bonnie & Clyde",
+      "number": "867-5309",
       "id": 9
     },
     {
-      "name": "Pam",
-      "number": "2",
-      "id": 10
+      "name": "George Washington",
+      "number": "1",
+      "id": 13
     },
     {
-      "name": "El",
-      "number": "9000",
-      "id": 11
+      "name": "Dave Letterman",
+      "number": "2345",
+      "id": 18
     }
   ]
 }
