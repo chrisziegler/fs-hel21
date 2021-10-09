@@ -1,6 +1,9 @@
 # dependencies
 node_modules/
 
+#separate repo Heroku
+part3/phonebook/
+
 # production
 build/
 .env
