@@ -25,18 +25,26 @@ const App = () => {
     personService.getAll().then(initialNumbers => {
       setPersons(initialNumbers)
     })
-  }, [persons])
+  }, [])
 
   useEffect(() => {
     const results = persons.filter(person =>
-      person.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      person?.name?.toLowerCase().includes(searchTerm.toLowerCase()),
     )
-    setFilter(results)
+    if (results) {
+      setFilter(results)
+    }
   }, [searchTerm, persons])
 
   const handleDelete = ({ id, name }) => {
-    personService.remove(id).then(window.confirm(`Delete ${name}?`))
-    setPersons(persons.filter(person => person.id !== id))
+    let confirmed = window.confirm(`Delete ${name}?`)
+    if (confirmed) {
+      personService
+        .remove(id)
+        .then(setPersons(persons.filter(person => person.id !== id)))
+    } else {
+      return
+    }
   }
 
   return (
