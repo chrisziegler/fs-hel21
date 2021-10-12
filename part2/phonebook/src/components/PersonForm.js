@@ -10,8 +10,12 @@ const PersonForm = ({
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
 
-  // const nullTimer = () => {
-
+  // const nullUtility = message => {
+  //   setNewName('')
+  //   setNewNumber('')
+  //   setTimeout(() => {
+  //     message(null)
+  //   }, 500)
   // }
 
   const handleNameInput = e => {
@@ -21,11 +25,15 @@ const PersonForm = ({
     setNewNumber(e.target.value)
   }
 
-  const handleSubmit = e => {
-    e.preventDefault()
+  const handleSubmit = event => {
+    event.preventDefault()
     const nameObject = { name: newName, number: newNumber }
     // if name is unique ...
-    if (!persons.some(person => person.name === newName)) {
+    let exists = persons.some(
+      p => p.name.toLowerCase() === newName.toLowerCase(),
+    )
+    console.log('exists?:', exists)
+    if (!exists) {
       personService
         .create(nameObject)
         .then(returnedPerson => {
@@ -43,45 +51,51 @@ const PersonForm = ({
             setErrorMessage(null)
           }, 5000)
         })
-    } else {
+    } else if (exists) {
       const confirmed = window.confirm(
-        `${newName} is already added to phonebook, replace old number with a new one?`,
+        `'${newName}' already exists, replace phone number?`,
       )
-
-      if (confirmed) {
-        const { id } = persons.find(person => person.name === newName)
-        personService
-          .update(nameObject, id)
-          .then(updatedPerson => {
-            setPersons(
-              persons.map(person =>
-                person.id !== id ? person : updatedPerson,
-              ),
-            ).then(() => {
-              setNewName('')
-              setNewNumber('')
-              setSuccessMessage(`Updated the phone number for ${newName}`)
-              setTimeout(() => {
-                setSuccessMessage(null)
-              }, 5000)
-            })
-          })
-          .catch(error => {
-            setErrorMessage(`Person was already removed from server`)
-            setNewName('')
-            setNewNumber('')
-            setTimeout(() => {
-              setErrorMessage(null)
-              personService.getAll().then(initialNumbers => {
-                setPersons(initialNumbers)
-              })
-            }, 5000)
-          })
-      } else {
+      if (confirmed === false) {
         setNewName('')
         setNewNumber('')
         return
       }
+
+      const { id } = persons.find(
+        person => person.name.toLowerCase() === newName.toLowerCase(),
+      )
+      console.log('id:', id)
+      personService
+        .update(nameObject, id)
+        .then(updatedPerson => {
+          // 2 browser case, with person deleted in 1, then # update attempted in 2
+          if (updatedPerson === null) {
+            throw new Error(`'${newName}' was already removed from server`)
+          } else {
+            setPersons(
+              persons.map(person =>
+                person.id !== id ? person : updatedPerson,
+              ),
+            )
+            setSuccessMessage(`Updated the entry`)
+            setNewName('')
+            setNewNumber('')
+            setTimeout(() => {
+              setSuccessMessage(null)
+            }, 5000)
+          }
+        })
+        .catch(error => {
+          setErrorMessage(error.message)
+          setNewName('')
+          setNewNumber('')
+          setTimeout(() => {
+            setErrorMessage(null)
+            personService.getAll().then(p => {
+              setPersons(p)
+            })
+          }, 5000)
+        })
     }
   }
 
