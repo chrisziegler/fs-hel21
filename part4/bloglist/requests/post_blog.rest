@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "A Prayer for Owen Meany",
+  "author": "John Irving",
+  "url": "http://www.john-irving.com",
+  "likes": 5
+}

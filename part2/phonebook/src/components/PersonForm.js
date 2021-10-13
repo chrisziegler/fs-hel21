@@ -7,33 +7,27 @@ const PersonForm = ({
   setSuccessMessage,
   setErrorMessage,
 }) => {
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
-
-  // const nullUtility = message => {
-  //   setNewName('')
-  //   setNewNumber('')
-  //   setTimeout(() => {
-  //     message(null)
-  //   }, 500)
-  // }
+  const [newEntry, setNewEntry] = useState({
+    name: '',
+    number: '',
+  })
 
   const handleNameInput = e => {
-    setNewName(e.target.value)
+    setNewEntry({ ...newEntry, name: e.target.value })
   }
+
   const handleNumberInput = e => {
-    setNewNumber(e.target.value)
+    setNewEntry({ ...newEntry, number: e.target.value })
   }
 
   const handleSubmit = event => {
     event.preventDefault()
-    const nameObject = { name: newName, number: newNumber }
-    // if name is unique ...
-    let exists = persons.some(
-      p => p.name.toLowerCase() === newName.toLowerCase(),
+    const nameObject = { name: newEntry.name, number: newEntry.number }
+    let inDB = persons.some(
+      p => p.name.toLowerCase() === newEntry.name.toLowerCase(),
     )
-    console.log('exists?:', exists)
-    if (!exists) {
+    // if input name is unique ...
+    if (!inDB) {
       personService
         .create(nameObject)
         .then(returnedPerson => {
@@ -42,8 +36,7 @@ const PersonForm = ({
           setTimeout(() => {
             setSuccessMessage(null)
           }, 5000)
-          setNewName('')
-          setNewNumber('')
+          setNewEntry({ name: '', number: '' })
         })
         .catch(error => {
           setErrorMessage(error.response.data.error)
@@ -51,35 +44,38 @@ const PersonForm = ({
             setErrorMessage(null)
           }, 5000)
         })
-    } else if (exists) {
+      // input name  exits - update confirmation
+    } else if (inDB) {
       const confirmed = window.confirm(
-        `'${newName}' already exists, replace phone number?`,
+        `'${newEntry.name}' already exists, replace phone number?`,
       )
+      // 'Cancel' pop-up
       if (confirmed === false) {
-        setNewName('')
-        setNewNumber('')
+        setNewEntry({ name: '', number: '' })
         return
       }
-
+      // 'Enter' pop-up
       const { id } = persons.find(
-        person => person.name.toLowerCase() === newName.toLowerCase(),
+        person =>
+          person.name.toLowerCase() === newEntry.name.toLowerCase(),
       )
-      console.log('id:', id)
       personService
         .update(nameObject, id)
         .then(updatedPerson => {
-          // 2 browser case, with person deleted in 1, then # update attempted in 2
+          // multi-tab browser case, with entry deleted in 1, then # update attempted in the other
           if (updatedPerson === null) {
-            throw new Error(`'${newName}' was already removed from server`)
+            throw new Error(
+              `'${newEntry.name}' was already removed from server`,
+            )
+            // normal update response
           } else {
             setPersons(
               persons.map(person =>
                 person.id !== id ? person : updatedPerson,
               ),
             )
-            setSuccessMessage(`Updated the entry`)
-            setNewName('')
-            setNewNumber('')
+            setSuccessMessage(`Updated the number`)
+            setNewEntry({ name: '', number: '' })
             setTimeout(() => {
               setSuccessMessage(null)
             }, 5000)
@@ -87,12 +83,11 @@ const PersonForm = ({
         })
         .catch(error => {
           setErrorMessage(error.message)
-          setNewName('')
-          setNewNumber('')
+          setNewEntry({ name: '', number: '' })
           setTimeout(() => {
             setErrorMessage(null)
-            personService.getAll().then(p => {
-              setPersons(p)
+            personService.getAll().then(people => {
+              setPersons(people)
             })
           }, 5000)
         })
@@ -103,11 +98,11 @@ const PersonForm = ({
     <form>
       <div>
         name:
-        <input value={newName} onChange={handleNameInput} />
+        <input value={newEntry.name} onChange={handleNameInput} />
       </div>
       <div>
         number:
-        <input value={newNumber} onChange={handleNumberInput} />
+        <input value={newEntry.number} onChange={handleNumberInput} />
       </div>
       <div>
         <button type="submit" onClick={handleSubmit}>
