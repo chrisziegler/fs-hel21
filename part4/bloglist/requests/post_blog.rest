@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "A Prayer for Owen Meany",
-  "author": "John Irving",
-  "url": "http://www.john-irving.com",
-  "likes": 5
+  "title": "npm audit: Broken by Design",
+  "author": "Dan Abramov",
+  "url": "https://overreacted.io/npm-audit-broken-by-design/",
+  "likes": 1
 }
