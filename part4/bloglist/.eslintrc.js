@@ -3,6 +3,7 @@ module.exports = {
     browser: true,
     commonjs: true,
     es2021: true,
+    jest: true,
   },
   globals: {
     process: 'writable',
@@ -21,5 +22,6 @@ module.exports = {
     'object-curly-spacing': ['error', 'always'],
     'arrow-spacing': ['error', { before: true, after: true }],
     noconsole: 0,
+    'no-irregular-whitespace': 1,
   },
 }
