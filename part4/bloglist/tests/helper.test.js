@@ -96,4 +96,18 @@ describe('total likes', () => {
       },
     ])
   })
+  test('when list has multiple blogs, returns the author with most blogs', () => {
+    const result = mostBlogs(blogs)
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3,
+    })
+  })
+  test('when list has multiple blogs, returns the author with most overall likes', () => {
+    const result = mostLikes(blogs)
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17,
+    })
+  })
 })
