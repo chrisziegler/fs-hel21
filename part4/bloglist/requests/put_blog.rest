@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/61668c9cf46a553c58f59c03
+Content-Type: application/json
+
+  {
+    "title": "A Prayer for Owen Meany",
+    "author": "John Irving",
+    "url": "http://www.john-irving.com",
+    "likes": 6
+  }
