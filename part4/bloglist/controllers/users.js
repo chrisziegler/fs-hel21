@@ -6,7 +6,11 @@ const User = require('../models/user')
 // https://github.com/blakehaswell/mongoose-unique-validator/issues/131
 
 usersRouter.get('/', async (request, response) => {
-  const users = await User.find({})
+  const users = await User.find({}).populate('blogs', {
+    title: 1,
+    author: 1,
+    date: 1,
+  })
   response.json(users)
 })
 

@@ -2,8 +2,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "npm audit: Broken by Design",
-  "author": "Dan Abramov",
-  "url": "https://overreacted.io/npm-audit-broken-by-design/",
-  "likes": 1
+  "title": "Guess that proves it",
+  "author": "Ralph Waldo Emerson",
+  "url": "https://google.gov",
+  "likes": 51,
+  "userId": "61724b8c29be17af1cf28d77"
 }
