@@ -3,16 +3,19 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs)
+  await User.deleteMany({})
   // const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
   // const promiseArray = blogObjects.map(blog => blog.save())
   // await Promise.all(promiseArray)
+  await helper.initialUser()
 })
-describe('when there are initially some notes saved', () => {
+describe('WHEN THERE ARE INITIALLY A FEW NOTES SAVED', () => {
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -51,7 +54,7 @@ describe('when there are initially some notes saved', () => {
   })
 })
 
-describe('addition of a new note', () => {
+describe('ADDITION OF A NEW NOTE', () => {
   test('a valid blog can be added', async () => {
     // const blogsBefore = await helper.blogsInDb()
     const newBlog = {
@@ -99,7 +102,7 @@ describe('addition of a new note', () => {
   })
 })
 
-describe('updating and removing notes', () => {
+describe('UPDATING AND REMOVIN NOTES', () => {
   test('a PUT request returns blog with updated Likes', async () => {
     const blogsBefore = await helper.blogsInDb()
     const originalBlog = blogsBefore[0]
@@ -125,6 +128,38 @@ describe('updating and removing notes', () => {
     await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
     const blogsAfter = await helper.blogsInDb()
     expect(blogsAfter.length).toEqual(blogsBefore.length - 1)
+  })
+})
+
+describe('WHEN THERE IS INITIALLY ONE USER IN DB', () => {
+  test('a user with valid info can be created', async () => {
+    const usersAtStart = await helper.usersInDb()
+    const user = {
+      username: 'firstUser',
+      name: 'Chris Ziegler',
+      password: 'hunter2',
+    }
+    await api
+      .post('/api/users')
+      .send(user)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+  })
+
+  test.only('a non-unique username returns the appropriate status and error', async () => {
+    const usersAtStart = await helper.usersInDb()
+    const user = {
+      username: 'admin',
+      name: 'Not the first admin',
+      password: 'hunter2',
+    }
+    const result = await api.post('/api/users').send(user).expect(500)
+
+    expect(result.body.message).toContain('Username already exists!')
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd.length).toEqual(usersAtStart.length)
   })
 })
 
