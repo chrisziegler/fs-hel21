@@ -102,7 +102,7 @@ describe('ADDITION OF A NEW NOTE', () => {
   })
 })
 
-describe('UPDATING AND REMOVIN NOTES', () => {
+describe('UPDATING AND REMOVING BLOGs', () => {
   test('a PUT request returns blog with updated Likes', async () => {
     const blogsBefore = await helper.blogsInDb()
     const originalBlog = blogsBefore[0]
