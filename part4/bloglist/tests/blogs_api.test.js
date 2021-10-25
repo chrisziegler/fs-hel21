@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const bcrypt = require('bcrypt')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
@@ -24,6 +25,38 @@ beforeEach(async () => {
 
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs(id))
+})
+
+describe('WHEN THERE IS INITIALLY ONE USER IN DB', () => {
+  test('a user with valid info can be created', async () => {
+    const usersAtStart = await helper.usersInDb()
+    const user = {
+      username: 'firstUser',
+      name: 'Chris Ziegler',
+      password: 'hunter2',
+    }
+    await api
+      .post('/api/users')
+      .send(user)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+  })
+
+  test('a non-unique username returns the appropriate status and error', async () => {
+    const usersAtStart = await helper.usersInDb()
+    const user = {
+      username: 'admin',
+      name: 'Not the first admin',
+      password: 'hunter2',
+    }
+    const result = await api.post('/api/users').send(user).expect(500)
+
+    expect(result.body.message).toContain('Username already exists!')
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd.length).toEqual(usersAtStart.length)
+  })
 })
 
 describe('WHEN THERE ARE INITIALLY A FEW NOTES SAVED', () => {
@@ -66,7 +99,7 @@ describe('WHEN THERE ARE INITIALLY A FEW NOTES SAVED', () => {
   })
 })
 
-describe('ADDITION OF A NEW NOTE', () => {
+describe('ADDITION OF A NEW BLOG', () => {
   test('a valid blog can be added', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const newBlog = {
@@ -120,69 +153,79 @@ describe('ADDITION OF A NEW NOTE', () => {
       .send(newBlog)
       .expect(400)
   })
+
+  test('Server responds with 401 Unauthorized if a token is not provided', async () => {
+    const newBlog = {
+      title: '',
+      author: 'Kent C. Dodds',
+      url: '',
+      likes: 0,
+    }
+
+    await api.post('/api/blogs').send(newBlog).expect(401)
+  })
 })
 
 // revamped beforeAll so initialBlogs all have admin as user key for id.toString()
-describe.skip('UPDATING AND REMOVING BLOGS', () => {
-  test('a PUT request returns blog with updated Likes', async () => {
+describe('UPDATING AND REMOVING BLOGS', () => {
+  test('a PUT request returns blog with updated likes', async () => {
     const blogsBefore = await helper.blogsInDb()
     const originalBlog = blogsBefore[0]
+    const originalLikes = originalBlog.likes
+    originalBlog.likes += 1
 
-    const updatedBlog = {
-      title: 'This Cider House Really Rules',
-      author: 'John Irving',
-      url: 'http://www.john-irving.com',
-      likes: 5,
-    }
-    const returnedBlog = await api.put(
-      `/api/blogs/${originalBlog.id}`,
-      updatedBlog,
-    )
+    // const updatedBlog = {
+    //   title: 'This Cider House Really Rules',
+    //   author: 'John Irving',
+    //   url: 'http://www.john-irving.com',
+    //   likes: 1,
+    // }
+    const returnedBlog = await api
+      .put(`/api/blogs/${originalBlog.id}`)
+      .send(originalBlog)
+
     expect(200)
-    console.log(returnedBlog.body)
-    // expect(returnedBlog.likes).toEqual(originalBlog.likes + 1)
+    expect(returnedBlog.body.likes).toEqual(originalLikes + 1)
   })
+
   test('Deleting a blog removes blog from DB', async () => {
     const blogsBefore = await helper.blogsInDb()
     const blogToDelete = blogsBefore[0]
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ Authorization: `Bearer ${token}` })
+      .expect(204)
     const blogsAfter = await helper.blogsInDb()
     expect(blogsAfter.length).toEqual(blogsBefore.length - 1)
   })
-})
+  test('Users can only delete the blogs they posted', async () => {
+    // intial blog created by admin
+    const blogsBefore = await helper.blogsInDb()
+    const blogToDelete = blogsBefore[0]
 
-// test('only the original blog poster can delete a blog')
+    // Create new user
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const newUser = new User({
+      username: 'newUser',
+      name: 'Tony Soprano',
+      passwordHash,
+    })
+    await newUser.save()
 
-describe('WHEN THERE IS INITIALLY ONE USER IN DB', () => {
-  test('a user with valid info can be created', async () => {
-    const usersAtStart = await helper.usersInDb()
-    const user = {
-      username: 'firstUser',
-      name: 'Chris Ziegler',
-      password: 'hunter2',
-    }
+    // log them in to get a token
+    const login = await api
+      .post('/api/login')
+      .send({ username: 'newUser', password: 'sekret' })
+    const newUserToken = login.body.token
+
+    // Authorized newUser tries to delete blog created by user admin
     await api
-      .post('/api/users')
-      .send(user)
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
-    const usersAtEnd = await helper.usersInDb()
-    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
-  })
-
-  test('a non-unique username returns the appropriate status and error', async () => {
-    const usersAtStart = await helper.usersInDb()
-    const user = {
-      username: 'admin',
-      name: 'Not the first admin',
-      password: 'hunter2',
-    }
-    const result = await api.post('/api/users').send(user).expect(500)
-
-    expect(result.body.message).toContain('Username already exists!')
-    const usersAtEnd = await helper.usersInDb()
-    expect(usersAtEnd.length).toEqual(usersAtStart.length)
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ Authorization: `Bearer ${newUserToken}` })
+      .expect(401)
+    const blogsAfter = await helper.blogsInDb()
+    expect(blogsAfter.length).toEqual(blogsBefore.length)
   })
 })
 

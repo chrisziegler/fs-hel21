@@ -31,8 +31,12 @@ blogsRouter.get('/:id', async (request, response, next) => {
 blogsRouter.post('/', userExtractor, async (request, response, next) => {
   try {
     const body = request.body
-    // thanks to custom userExtractor middleware
+    const token = request.token
+    // thanks to custom tokenExtractor & userExtractor middleware
     const user = request.user
+    if (!user || !token) {
+      return response.status(401).json({ error: '401 - unauthorized' })
+    }
     const blog = new Blog({
       title: body.title,
       author: body.author,
@@ -72,6 +76,7 @@ blogsRouter.put('/:id', async (request, response, next) => {
       },
     )
     response.json(updatedBlog)
+    console.log(updatedBlog)
   } catch (exception) {
     next(exception)
   }

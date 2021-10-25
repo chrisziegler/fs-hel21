@@ -8,7 +8,7 @@ const initialBlogs = userid => {
       title: 'This Cider House Really Rules',
       author: 'John Irving',
       url: 'http://www.john-irving.com',
-      likes: 4,
+      likes: 0,
       date: new Date(),
       user: userid,
     },
