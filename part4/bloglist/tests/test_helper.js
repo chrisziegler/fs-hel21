@@ -2,28 +2,32 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 
-const initialBlogs = [
-  {
-    title: 'This Cider House Really Rules',
-    author: 'John Irving',
-    url: 'http://www.john-irving.com',
-    likes: 4,
-    date: new Date(),
-  },
-  {
-    title: 'Texas motto: LADIES WE KNOW WHATS BEST FOR YOU',
-    author: 'Stephen King',
-    url: 'http://www.stephenking.com',
-    likes: 3,
-    date: new Date(),
-  },
-]
+const initialBlogs = userid => {
+  return [
+    {
+      title: 'This Cider House Really Rules',
+      author: 'John Irving',
+      url: 'http://www.john-irving.com',
+      likes: 4,
+      date: new Date(),
+      user: userid,
+    },
+    {
+      title: 'Texas motto: LADIES WE KNOW WHATS BEST FOR YOU',
+      author: 'Stephen King',
+      url: 'http://www.stephenking.com',
+      likes: 3,
+      date: new Date(),
+      user: userid,
+    },
+  ]
+}
 
 const initialUser = async () => {
   const passwordHash = await bcrypt.hash('sekret', 10)
   const user = new User({
     username: 'admin',
-    name: 'Chris Ziegler',
+    name: 'Robert Johnson',
     passwordHash,
   })
 
