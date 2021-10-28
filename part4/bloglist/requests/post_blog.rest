@@ -1,11 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOiI2MTcyNGI4YzI5YmUxN2FmMWNmMjhkNzciLCJpYXQiOjE2MzUxOTMxNzcsImV4cCI6MTYzNTI3OTU3N30.zrFxwNF974X1pDnQGu79Ft9gjS1Pf3EdFILP0kASkav
+Authorization: bearer 
 
 {
-  "title": "This should produce a 401 Unauthorized",
+  "title": "New delete test with unauthorized user",
   "author": "Chris",
   "url": "https://mozilla.org",
-  "likes": 33
+  "likes": 0
 }
 

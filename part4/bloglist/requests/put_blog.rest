@@ -1,9 +1,9 @@
-PUT http://localhost:3003/api/blogs/61668c9cf46a553c58f59c03
+PUT http://localhost:3003/api/blogs/61772c69489ea857966eb852
 Content-Type: application/json
 
   {
-    "title": "A Prayer for Owen Meany",
-    "author": "John Irving",
-    "url": "http://www.john-irving.com",
-    "likes": 6
+    "title": "New delete test with unauthorized user",
+    "author": "Chris",
+    "url": "http://www.mozilla.com",
+    "likes": 23
   }
