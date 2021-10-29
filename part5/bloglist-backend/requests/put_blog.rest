@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/61772c69489ea857966eb852
+Content-Type: application/json
+
+  {
+    "title": "New delete test with unauthorized user",
+    "author": "Chris",
+    "url": "http://www.mozilla.com",
+    "likes": 23
+  }
