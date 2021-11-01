@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
-import blogService from './services/blogs'
+import * as blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
 
@@ -41,6 +41,7 @@ const App = () => {
           'loggedBloglistAppUser',
           JSON.stringify(user),
         )
+        blogService.setToken(user.token)
         setUser(user)
         setUsername('')
         setPassword('')
@@ -70,7 +71,7 @@ const App = () => {
       }, 5000)
     } catch (error) {
       setErrorMessage(
-        `${error.toString()}, title and author required with minimum length of 5 characters`,
+        `${error.toString()}, title, author url required with minimum length of 5 characters each`,
       )
       setTimeout(() => {
         setErrorMessage(null)

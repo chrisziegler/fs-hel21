@@ -4,8 +4,7 @@ Authorization: bearer
 
 {
   "title": "New delete test with unauthorized user",
-  "author": "Chris",
-  "url": "https://mozilla.org",
+  "author": "First User Baby",
   "likes": 0
 }
 

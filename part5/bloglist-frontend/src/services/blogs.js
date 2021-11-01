@@ -4,16 +4,16 @@ const baseUrl = '/api/blogs'
 // private variable - set from outside module (App.js)
 let token = null
 
-const setToken = newToken => {
+export const setToken = newToken => {
   token = `bearer ${newToken}`
 }
 
-const getAll = async () => {
+export const getAll = async () => {
   const response = await axios.get(baseUrl)
   return response.data
 }
 
-const create = async newObj => {
+export const create = async newObj => {
   const config = {
     headers: { Authorization: token },
   }
@@ -22,4 +22,4 @@ const create = async newObj => {
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { setToken, getAll, create }
+// export default { setToken, getAll, create }
