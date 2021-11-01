@@ -1,5 +1,5 @@
 body {
-  margin: 1rem;
+  margin: 1.5rem 0 0 3rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
     'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
     'Helvetica Neue', sans-serif;
@@ -35,17 +35,22 @@ code {
   margin-bottom: 0.5em;
 }
 
+.list {
+  margin-bottom: 1em;
+  line-height: 1.6;
+}
+
 .button {
   border: 0;
   border-radius: 0.25rem;
-  background: #1e88e5;
+  background: #204668;
   color: white;
   font-family: system-ui, sans-serif;
   font-size: 0.8rem;
-  line-height: 1.2;
+  line-height: 1.1;
   white-space: nowrap;
   text-decoration: none;
-  padding: 0.25rem 0.5rem;
+  padding-bottom: 0.3em;
   margin-top: 0.5em;
   margin-left: 15.7em;
   cursor: pointer;
@@ -81,4 +86,12 @@ code {
   font-family: system-ui, sans-serif;
   color: #03233f;
   margin-bottom: 0.3em;
+}
+
+.logout {
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-family: system-ui, sans-serif;
+  padding-top: 0;
+  line-height: 1.1;
 }

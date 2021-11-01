@@ -28,7 +28,7 @@ loginRouter.post('/', async (request, response) => {
   }
   // jwt uses an enviornment variable secret along with the username and id to create a token with digital signature
 
-  // token expires in 60*60 seconds * 72, that is, in one day
+  // token expires in 60*60 seconds * 24, that is, in one day
   const token = jwt.sign(userForToken, process.env.SECRET, {
     expiresIn: 60 * 60 * 24,
   })

@@ -81,7 +81,7 @@ const App = () => {
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
-      <h2>Blogs login</h2>
+      <h3>blogs login</h3>
       <Notification
         errorMessage={errorMessage}
         successMessage={successMessage}
@@ -107,6 +107,11 @@ const App = () => {
       </button>
     </form>
   )
+
+  const logout = () => {
+    window.localStorage.removeItem('loggedBloglistAppUser')
+    setUser(null)
+  }
 
   const blogForm = () => (
     <form onSubmit={handleBlogSubmit}>
@@ -158,11 +163,16 @@ const App = () => {
         successMessage={successMessage}
       />
       <p className="smtext">
-        <em>{user.name}</em> is logged in
+        <em>{user.name}</em> is logged in{' '}
+        <button className="logout" onClick={() => logout()}>
+          logout
+        </button>
       </p>
-      {blogs.map(blog => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
+      <div className="list">
+        {blogs.map(blog => (
+          <Blog key={blog.id} blog={blog} />
+        ))}
+      </div>
       {blogForm()}
     </div>
   )
