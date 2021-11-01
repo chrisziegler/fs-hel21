@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -13,6 +14,8 @@ const App = () => {
     author: '',
     url: '',
   })
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
@@ -33,15 +36,23 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService({ username, password })
-      window.localStorage.setItem(
-        'loggedBloglistAppUser',
-        JSON.stringify(user),
-      )
-      setUser(user)
-      setUsername('')
-      setPassword('')
+      if (user) {
+        window.localStorage.setItem(
+          'loggedBloglistAppUser',
+          JSON.stringify(user),
+        )
+        setUser(user)
+        setUsername('')
+        setPassword('')
+      } else {
+        setPassword('')
+        setErrorMessage('wrong username or password')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      }
     } catch (error) {
-      console.log(error.message)
+      console.log(error)
     }
   }
 
@@ -51,14 +62,29 @@ const App = () => {
       const newBlog = await blogService.create(newblog)
       setBlogs(blogs.concat(newBlog))
       setNewblog({ title: '', author: '', url: '' })
+      setSuccessMessage(
+        `a new blog ${newBlog.title} ${newBlog.error} added`,
+      )
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
     } catch (error) {
-      console.log(error.message)
+      setErrorMessage(
+        `${error.toString()}, title and author required with minimum length of 5 characters`,
+      )
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <h2>Blogs login</h2>
+      <Notification
+        errorMessage={errorMessage}
+        successMessage={successMessage}
+      />
       <div className="form">
         <input
           type="text"
@@ -126,6 +152,10 @@ const App = () => {
   const blogList = () => (
     <div>
       <h1>blogs</h1>
+      <Notification
+        errorMessage={errorMessage}
+        successMessage={successMessage}
+      />
       <p className="smtext">
         <em>{user.name}</em> is logged in
       </p>
@@ -137,6 +167,14 @@ const App = () => {
   )
 
   return <div>{!user ? loginForm() : blogList()}</div>
+  // return (
+  //   <>
+  //     <div>{loginForm()}</div>
+  //     {user && <div>User {user.username} is logged in</div>}
+  //     <div>{blogList()}</div>
+  //     <div>{blogForm()}</div>
+  //   </>
+  // )
 }
 
 export default App

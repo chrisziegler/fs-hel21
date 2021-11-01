@@ -17,12 +17,8 @@ const create = async newObj => {
   const config = {
     headers: { Authorization: token },
   }
-  try {
-    const response = await axios.post(baseUrl, newObj, config)
-    return response.data
-  } catch (error) {
-    console.log(error.message)
-  }
+  const response = await axios.post(baseUrl, newObj, config)
+  return response.data
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
