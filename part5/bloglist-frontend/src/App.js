@@ -73,32 +73,39 @@ const App = () => {
   }
 
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <h3>blogs login</h3>
-      <Notification
-        errorMessage={errorMessage}
-        successMessage={successMessage}
-      />
-      <div className="form">
-        <input
-          type="text"
-          name="Username"
-          value={username}
-          onChange={({ target }) => setUsername(target.value)}
+    <div>
+      <h1>
+        bl<span style={{ color: 'thistle' }}>o</span>gs
+      </h1>
+      <form onSubmit={handleLogin}>
+        <h3 style={{ marginTop: '2em' }}>blogs login</h3>
+        <Notification
+          errorMessage={errorMessage}
+          successMessage={successMessage}
         />
-      </div>
-      <div className="form">
-        <input
-          type="password"
-          name="Password"
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button className="button login" type="submit">
-        submit
-      </button>
-    </form>
+        <div className="form">
+          username
+          <input
+            type="text"
+            name="Username"
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div className="form">
+          password
+          <input
+            type="password"
+            name="Password"
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button className="button login" type="submit">
+          submit
+        </button>
+      </form>
+    </div>
   )
 
   const logout = () => {
@@ -107,7 +114,11 @@ const App = () => {
   }
 
   const blogForm = () => (
-    <Togglable buttonLabel="new blog" ref={blogFormRef}>
+    <Togglable
+      buttonLabel="new blog"
+      cancelButtonLabel="cancel"
+      ref={blogFormRef}
+    >
       <BlogForm
         createBlog={addBlog}
         setSuccessMessage={setSuccessMessage}
@@ -118,23 +129,26 @@ const App = () => {
 
   const blogList = () => (
     <div>
-      <h1>blogs</h1>
+      <h1>
+        bl<span style={{ color: 'thistle' }}>o</span>gs
+      </h1>
       <Notification
         errorMessage={errorMessage}
         successMessage={successMessage}
       />
+
       <p className="smtext">
         <em>{user.name}</em> is logged in{' '}
         <button className="logout" onClick={() => logout()}>
           logout
         </button>
       </p>
+      {blogForm()}
       <div className="list">
         {blogs.map(blog => (
           <Blog key={blog.id} blog={blog} />
         ))}
       </div>
-      {blogForm()}
     </div>
   )
 
