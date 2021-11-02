@@ -23,11 +23,6 @@ h1 {
   font-size: 1.5rem;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 .form {
   max-width: 16rem;
   display: flex;
@@ -40,10 +35,14 @@ code {
   line-height: 1.6;
 }
 
-.button {
-  border: 0;
+.blogform {
+  margin-top: 0.75em;
+}
+
+button {
+  border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 0.25rem;
-  background: #204668;
+  background: gray;
   color: white;
   font-family: system-ui, sans-serif;
   font-size: 0.8rem;
@@ -52,13 +51,35 @@ code {
   text-decoration: none;
   padding-bottom: 0.3em;
   margin-top: 0.5em;
-  margin-left: 15.7em;
+  margin-left: 0.3em;
   cursor: pointer;
 }
 
-.button.login {
+button:hover {
+  background: rgb(156, 156, 156);
+}
+
+.submit {
+  margin-left: 15.7em;
+  background: steelblue;
+}
+
+.submit:hover {
+  background: rgb(84, 152, 207);
+}
+
+.login {
   margin: 0;
   margin-top: 0.5em;
+}
+
+.logout {
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-family: system-ui, sans-serif;
+  padding-top: 0;
+  line-height: 1;
+  background: gray;
 }
 
 .error {
@@ -86,12 +107,4 @@ code {
   font-family: system-ui, sans-serif;
   color: #03233f;
   margin-bottom: 0.3em;
-}
-
-.logout {
-  cursor: pointer;
-  font-size: 0.65rem;
-  font-family: system-ui, sans-serif;
-  padding-top: 0;
-  line-height: 1.1;
 }

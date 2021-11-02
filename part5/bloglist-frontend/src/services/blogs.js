@@ -14,12 +14,13 @@ export const getAll = async () => {
 }
 
 export const create = async newObj => {
-  const config = {
-    headers: { Authorization: token },
+  try {
+    const config = {
+      headers: { Authorization: token },
+    }
+    const response = await axios.post(baseUrl, newObj, config)
+    return response.data
+  } catch (exception) {
+    console.log(exception)
   }
-  const response = await axios.post(baseUrl, newObj, config)
-  return response.data
 }
-
-// eslint-disable-next-line import/no-anonymous-default-export
-// export default { setToken, getAll, create }
