@@ -83,6 +83,7 @@ button {
 
 button:hover {
   background: rgb(156, 156, 156);
+  cursor: default;
 }
 
 .submit {
@@ -144,18 +145,27 @@ button:hover {
 .like {
   position: relative;
   bottom: 0.15em;
-  margin-left: 0.6em;
-  cursor: pointer;
-  font-size: 0.65rem;
-  font-family: system-ui, sans-serif;
-  padding-top: 0;
-  line-height: 1;
+  background: transparent;
   color: black;
-  background: plum;
+  margin-left: 0.6em;
+  line-height: 1;
+  font-size: 0.8rem;
+  transition: all 1s ease-out;
 }
 
 .like:hover {
-  background: rgb(245, 190, 245);
+  background: transparent;
+  text-decoration: underline solid rgba(0, 0, 0, 0.5);
+}
+
+.liked {
+  background: peachpuff;
+  cursor: default;
+}
+
+.liked:hover {
+  text-decoration: none;
+  background: peachpuff;
 }
 
 .error {

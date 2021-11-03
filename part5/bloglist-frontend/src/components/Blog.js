@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import * as blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, blogs, setBlogs }) => {
   const [showFull, setShowFull] = useState(false)
 
   const summary = () => {
@@ -21,28 +22,48 @@ const Blog = ({ blog }) => {
       paddingLeft: '0.2em',
     }
 
+    const handleLike = async (e, blogObj) => {
+      const updatedBlog = await blogService.update(blogObj)
+      if (updatedBlog) {
+        const returnedBlogs = await blogService.getAll()
+        setBlogs(returnedBlogs)
+        e.target.classList.toggle('liked')
+        e.target.innerText = 'liked'
+      } else {
+        console.log("something went wrong with adding a 'like'")
+        return
+      }
+    }
+
     return (
       <div>
         <ul style={detailStyle}>
           <hr />
           <li>
             <span>
-              <i>title:</i> &nbsp;{blog.title}
+              <i>{blog.title}</i>
             </span>{' '}
             <button onClick={toggleShow} className="hide">
               hide
             </button>
           </li>
-          <li>
-            <i>url:&nbsp;</i> {blog.url}
+          <li
+            style={{
+              textDecoration: 'underline solid rgba(0, 0, 0, 0.4)',
+            }}
+          >
+            {blog.url}
           </li>
           <li>
-            <i>likes:&nbsp;</i> {blog.likes}{' '}
-            <button className="like">like</button>
+            likes:&nbsp; {blog.likes}{' '}
+            <button
+              className="like"
+              onClick={event => handleLike(event, blog)}
+            >
+              like
+            </button>
           </li>
-          <li>
-            <i>author:&nbsp;</i> {blog.author}
-          </li>
+          <li>author:&nbsp;{blog.author}</li>
           <hr />
         </ul>
       </div>

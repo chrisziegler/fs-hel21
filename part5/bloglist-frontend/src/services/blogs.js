@@ -24,3 +24,24 @@ export const create = async newObj => {
     console.log(exception)
   }
 }
+export const update = async newObj => {
+  try {
+    let { id, likes } = newObj
+    likes += 1
+    const updatedBlog = {
+      ...newObj,
+      likes,
+    }
+    const config = {
+      headers: { Authorization: token },
+    }
+    const response = await axios.put(
+      `${baseUrl}/${id}`,
+      updatedBlog,
+      config,
+    )
+    return response.data
+  } catch (exception) {
+    console.log(exception)
+  }
+}
