@@ -135,7 +135,7 @@ const App = () => {
     </Togglable>
   )
 
-  const blogList = () => (
+  const BlogList = () => (
     <div>
       <h1>
         bl<span style={{ color: 'thistle' }}>o</span>gs
@@ -167,7 +167,7 @@ const App = () => {
     </div>
   )
 
-  return <div>{!user ? loginForm() : blogList()}</div>
+  return <div>{!user ? loginForm() : <BlogList />}</div>
 }
 
 export default App

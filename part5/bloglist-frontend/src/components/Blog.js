@@ -45,6 +45,9 @@ const Blog = ({ blog, blogs, setBlogs, user, setSuccessMessage }) => {
     }
 
     const handleDelete = async blog => {
+      if (!window.confirm(`Do you really want to delete ${blog.title}?`)) {
+        return
+      }
       const { id, title } = blog
       const removedBlog = await blogService.remove(id)
       if (removedBlog === 204) {
