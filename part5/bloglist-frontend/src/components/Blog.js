@@ -19,14 +19,23 @@ const Blog = ({ blog, blogs, setBlogs, user, setSuccessMessage }) => {
 
   const fullDetails = () => {
     const detailStyle = {
-      paddingLeft: '0.2em',
+      background: 'rgb(230, 227, 216)',
+    }
+    const liStyle = {
+      paddingLeft: '0.3em',
     }
 
     const handleLike = async (e, blogObj) => {
       const updatedBlog = await blogService.update(blogObj)
       if (updatedBlog) {
-        const returnedBlogs = await blogService.getAll()
-        setBlogs(returnedBlogs)
+        // const returnedBlogs = await blogService.getAll()
+        // setBlogs(returnedBlogs)
+        // unlike with the post route adding a like shouldn't require the populate data from the a separate call to the GET route
+        // first remove updated blog
+        const unupdatedRemoved = blogs.filter(
+          blog => blog.id !== updatedBlog.id,
+        )
+        setBlogs(unupdatedRemoved.concat(updatedBlog))
         e.target.classList.toggle('liked')
         e.target.innerText = 'liked'
       } else {
@@ -54,7 +63,7 @@ const Blog = ({ blog, blogs, setBlogs, user, setSuccessMessage }) => {
       <div>
         <ul style={detailStyle}>
           <hr />
-          <li>
+          <li style={liStyle}>
             <span>
               <i>{blog.title}</i>
             </span>{' '}
@@ -62,14 +71,10 @@ const Blog = ({ blog, blogs, setBlogs, user, setSuccessMessage }) => {
               hide
             </button>
           </li>
-          <li
-            style={{
-              textDecoration: 'underline solid rgba(0, 0, 0, 0.4)',
-            }}
-          >
-            {blog.url}
+          <li style={liStyle}>
+            <a href={blog.url}>{blog.url}</a>
           </li>
-          <li>
+          <li style={liStyle}>
             likes:&nbsp; {blog.likes}{' '}
             <button
               className="like"
@@ -78,8 +83,7 @@ const Blog = ({ blog, blogs, setBlogs, user, setSuccessMessage }) => {
               like
             </button>
           </li>
-          <li>author:&nbsp;{blog.author}</li>
-          {console.log(user.username, blog.user.username)}
+          <li style={liStyle}>author:&nbsp;{blog.author}</li>
           {user.username === blog.user.username && (
             <button className="delete" onClick={() => handleDelete(blog)}>
               delete
