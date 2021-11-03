@@ -13,10 +13,11 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
-  // const [showBlogForm, setShowBlogForm] = useState(false)
 
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs))
+    blogService
+      .getAll()
+      .then(blogs => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
   }, [])
 
   useEffect(() => {
@@ -61,7 +62,14 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
     const returnedBlog = await blogService.create(blogObject)
     if (returnedBlog) {
-      setBlogs(blogs.concat(returnedBlog))
+      // setBlogs(blogs.concat(returnedBlog))
+      // Updating state here as above would be preferable, but:
+      // Need this extra db call since the response.data in the put route doesn't populate the user field with an
+      // object containing id, and username, only the get route does that.
+      // so this adds a blog object without those files and we can't compare user.username to blog.user.username
+      // until we rerender after that updated state change - just annoying non-relational db stuff
+      const returnedBlogs = await blogService.getAll()
+      setBlogs(returnedBlogs)
     } else {
       setErrorMessage(
         ` title, author url required with minimum length of 5 characters each`,
@@ -151,6 +159,8 @@ const App = () => {
             blog={blog}
             blogs={blogs}
             setBlogs={setBlogs}
+            user={user}
+            setSuccessMessage={setSuccessMessage}
           />
         ))}
       </div>

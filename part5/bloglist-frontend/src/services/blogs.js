@@ -45,3 +45,14 @@ export const update = async newObj => {
     console.log(exception)
   }
 }
+export const remove = async id => {
+  try {
+    const config = {
+      headers: { Authorization: token },
+    }
+    const response = await axios.delete(`${baseUrl}/${id}`, config)
+    return response.status
+  } catch (exception) {
+    console.log(exception)
+  }
+}

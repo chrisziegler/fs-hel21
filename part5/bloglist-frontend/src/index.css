@@ -168,6 +168,18 @@ button:hover {
   background: peachpuff;
 }
 
+.delete {
+  position: relative;
+  bottom: 0.15em;
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-family: system-ui, sans-serif;
+  padding-top: 0;
+  line-height: 1;
+  color: white;
+  background: red;
+}
+
 .error {
   color: red;
   background: lightgrey;

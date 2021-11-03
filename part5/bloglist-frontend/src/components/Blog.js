@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import * as blogService from '../services/blogs'
 
-const Blog = ({ blog, blogs, setBlogs }) => {
+const Blog = ({ blog, blogs, setBlogs, user, setSuccessMessage }) => {
   const [showFull, setShowFull] = useState(false)
 
   const summary = () => {
@@ -35,6 +35,21 @@ const Blog = ({ blog, blogs, setBlogs }) => {
       }
     }
 
+    const handleDelete = async blog => {
+      const { id, title } = blog
+      const removedBlog = await blogService.remove(id)
+      if (removedBlog === 204) {
+        const returnedBlogs = await blogService.getAll()
+        setBlogs(returnedBlogs)
+        setSuccessMessage(`${title} removed`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      } else {
+        return
+      }
+    }
+
     return (
       <div>
         <ul style={detailStyle}>
@@ -64,6 +79,12 @@ const Blog = ({ blog, blogs, setBlogs }) => {
             </button>
           </li>
           <li>author:&nbsp;{blog.author}</li>
+          {console.log(user.username, blog.user.username)}
+          {user.username === blog.user.username && (
+            <button className="delete" onClick={() => handleDelete(blog)}>
+              delete
+            </button>
+          )}
           <hr />
         </ul>
       </div>
