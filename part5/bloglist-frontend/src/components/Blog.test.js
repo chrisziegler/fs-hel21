@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react'
 // import { prettyDOM } from '@testing-library/react'
 import Blog from './Blog'
 
-describe.skip('<Blog />', () => {
+describe('<Blog />', () => {
   let blog, user
   beforeEach(() => {
     blog = {

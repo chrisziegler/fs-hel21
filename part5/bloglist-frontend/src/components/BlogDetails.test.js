@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react'
 import { prettyDOM } from '@testing-library/react'
 import BlogDetails from './BlogDetails'
 
-describe('<Blog />', () => {
+describe('<BlogDetails />', () => {
   let blog, user
   beforeEach(() => {
     blog = {
@@ -20,19 +20,21 @@ describe('<Blog />', () => {
     }
   })
 
-  test.only('<BlogDetails /> if like button is clicked twice, associated event handler is called twice', () => {
+  // NB I changed this test to fire only once, the way this is handled in
+  // the app is the button is 'disabled' after a user likes a particular blog
+  // to discoourage vote spamming
+  test('<BlogDetails /> if like button is clicked, associated event handler is called', () => {
     const mockHandler = jest.fn()
     const component = render(
-      <BlogDetails blog={blog} user={user} handleLike={mockHandler} />,
+      <BlogDetails blog={blog} user={user} handleLikes={mockHandler} />,
     )
 
-    // fireEvent.click(detailsButton)
     const div = component.container.querySelector('.fullDetails')
-    // const likeButton = component.getByText('like')
     console.log(prettyDOM(div))
-    // fireEvent.click(likeButton)
-    // expect(mockHandler.mock.calls).toHaveLength(1)
-    // fireEvent.click(likeButton)
-    // expect(likeBlog.mock.calls).toHaveLength(1)
+    const button = component.getByText('like')
+    fireEvent.click(button)
+    // fireEvent.click(button)
+    // expect(mockHandler.mock.calls).toHaveLength(2)
+    expect(mockHandler.mock.calls).toHaveLength(1)
   })
 })

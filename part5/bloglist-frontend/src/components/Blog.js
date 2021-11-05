@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import * as blogService from '../services/blogs'
 import BlogDetails from './BlogDetails'
 
-const Blog = ({ blog, setBlogs, blogs, user, setSuccessMessage }) => {
+const Blog = ({ blog, setBlogs, user, setSuccessMessage }) => {
   const [showFull, setShowFull] = useState(false)
 
   const blogSummary = () => {
@@ -18,20 +18,18 @@ const Blog = ({ blog, setBlogs, blogs, user, setSuccessMessage }) => {
     )
   }
 
-  const handleLike = async blogObj => {
+  const handleLikes = async blogObj => {
     const updatedBlog = await blogService.update(blogObj)
     if (updatedBlog) {
-      // const returnedBlogs = await blogService.getAll()
-      // setBlogs(returnedBlogs)
+      return
+      // decided not to update state while updating likes
+      // mock the behavior in BlogDetails state and update on server
+      // to prevent re-render and losing showFull state for detailed blog
 
-      // unlike with the post route adding a like shouldn't require the populate data from the a separate call to the GET route
-      // first remove updated blog
-      const removeUpdated = blogs.filter(
-        blog => blog.id !== updatedBlog.id,
-      )
-      setBlogs(removeUpdated.concat(updatedBlog))
-      // e.target.classList.toggle('liked')
-      // e.target.innerText = 'liked'
+      // const removeUpdated = blogs.filter(
+      //   blog => blog.id !== updatedBlog.id,
+      // )
+      // setBlogs(removeUpdated.concat(updatedBlog))
     } else {
       console.log("something went wrong with adding a 'like'")
       return
@@ -68,7 +66,7 @@ const Blog = ({ blog, setBlogs, blogs, user, setSuccessMessage }) => {
         <BlogDetails
           blog={blog}
           toggleShow={toggleShow}
-          handleLike={handleLike}
+          handleLikes={handleLikes}
           user={user}
           handleDelete={handleDelete}
         />

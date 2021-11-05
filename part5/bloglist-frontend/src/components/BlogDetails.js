@@ -1,15 +1,29 @@
+import { useState } from 'react'
+
 const BlogDetails = ({
   blog,
   toggleShow,
-  handleLike,
+  handleLikes,
   user,
   handleDelete,
 }) => {
+  const [likes, setLikes] = useState(blog.likes)
+  const [disable, setDisable] = useState(false)
+
   const detailStyle = {
     background: 'rgb(230, 227, 216)',
   }
   const liStyle = {
     paddingLeft: '0.3em',
+  }
+
+  const handleBlogLikes = (event, blog) => {
+    let renderedLikes = likes
+    setLikes((renderedLikes += 1))
+    setDisable(true)
+    event.target.classList.toggle('liked')
+    event.target.innerText = 'liked'
+    handleLikes(blog)
   }
 
   return (
@@ -28,8 +42,12 @@ const BlogDetails = ({
           <a href={blog.url}>{blog.url}</a>
         </li>
         <li style={liStyle}>
-          likes:&nbsp; {blog.likes}{' '}
-          <button className="like" onClick={() => handleLike(blog)}>
+          likes:&nbsp; {likes}{' '}
+          <button
+            className="like"
+            disabled={disable}
+            onClick={event => handleBlogLikes(event, blog)}
+          >
             like
           </button>
         </li>

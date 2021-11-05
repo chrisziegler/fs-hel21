@@ -163,6 +163,10 @@ const App = () => {
               setSuccessMessage={setSuccessMessage}
             />
           ))}
+        <p className="smtext">
+          Likes will be retallied from server after blog detail is hidden,
+          on screen refresh (F5).
+        </p>
       </div>
     </div>
   )
