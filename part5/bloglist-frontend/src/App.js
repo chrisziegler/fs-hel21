@@ -15,9 +15,7 @@ const App = () => {
   const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
-    blogService
-      .getAll()
-      .then(blogs => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
+    blogService.getAll().then(blogs => setBlogs(blogs))
   }, [])
 
   useEffect(() => {
@@ -153,16 +151,18 @@ const App = () => {
       </p>
       {blogForm()}
       <div className="list">
-        {blogs.map(blog => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            blogs={blogs}
-            setBlogs={setBlogs}
-            user={user}
-            setSuccessMessage={setSuccessMessage}
-          />
-        ))}
+        {blogs
+          .sort((a, b) => b.likes - a.likes)
+          .map(blog => (
+            <Blog
+              key={blog.id}
+              blog={blog}
+              setBlogs={setBlogs}
+              blogs={blogs}
+              user={user}
+              setSuccessMessage={setSuccessMessage}
+            />
+          ))}
       </div>
     </div>
   )
