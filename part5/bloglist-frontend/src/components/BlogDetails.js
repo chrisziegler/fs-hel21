@@ -8,7 +8,8 @@ const BlogDetails = ({
   handleDelete,
 }) => {
   const [likes, setLikes] = useState(blog.likes)
-  const [disable, setDisable] = useState(false)
+  // conflicts with supplemental test exercise requirement
+  // const [disable, setDisable] = useState(false)
 
   const detailStyle = {
     background: 'rgb(230, 227, 216)',
@@ -20,7 +21,7 @@ const BlogDetails = ({
   const handleBlogLikes = (event, blog) => {
     let renderedLikes = likes
     setLikes((renderedLikes += 1))
-    setDisable(true)
+    // setDisable(true)
     event.target.classList.toggle('liked')
     event.target.innerText = 'liked'
     handleLikes(blog)
@@ -45,7 +46,7 @@ const BlogDetails = ({
           likes:&nbsp; {likes}{' '}
           <button
             className="like"
-            disabled={disable}
+            // disabled={disable}
             onClick={event => handleBlogLikes(event, blog)}
           >
             like

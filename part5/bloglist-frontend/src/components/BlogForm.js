@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const BlogForm = ({ createBlog, setSuccessMessage, setErrorMessage }) => {
+const BlogForm = ({ createBlog }) => {
   const [newblog, setNewblog] = useState({
     title: '',
     author: '',
@@ -11,10 +11,6 @@ const BlogForm = ({ createBlog, setSuccessMessage, setErrorMessage }) => {
     event.preventDefault()
     createBlog(newblog)
     setNewblog({ title: '', author: '', url: '' })
-    setSuccessMessage(`a new blog ${newblog.title}  added`)
-    setTimeout(() => {
-      setSuccessMessage(null)
-    }, 5000)
   }
 
   return (
@@ -23,6 +19,7 @@ const BlogForm = ({ createBlog, setSuccessMessage, setErrorMessage }) => {
       <div className="form">
         title
         <input
+          id="title"
           type="text"
           name="Title"
           value={newblog.title}
@@ -34,6 +31,7 @@ const BlogForm = ({ createBlog, setSuccessMessage, setErrorMessage }) => {
       <div className="form">
         author
         <input
+          id="author"
           type="text"
           name="Author"
           value={newblog.author}
@@ -45,6 +43,7 @@ const BlogForm = ({ createBlog, setSuccessMessage, setErrorMessage }) => {
       <div className="form">
         url
         <input
+          id="url"
           type="text"
           name="URL"
           value={newblog.url}

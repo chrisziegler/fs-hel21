@@ -10,6 +10,7 @@ body {
     'Helvetica Neue', sans-serif; */
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
+  font-size: 0.75rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: rgb(214, 210, 194);
@@ -149,7 +150,7 @@ button:hover {
   color: black;
   margin-left: 0.6em;
   line-height: 1;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   transition: all 1s ease-out;
 }
 
@@ -204,7 +205,7 @@ button:hover {
 }
 
 .smtext {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-family: system-ui, sans-serif;
   color: #03233f;
   margin-bottom: 0.3em;

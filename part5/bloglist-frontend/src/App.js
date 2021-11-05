@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
+import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import * as blogService from './services/blogs'
 import loginService from './services/login'
@@ -64,8 +65,12 @@ const App = () => {
       // Updating state here as above would be preferable, but:
       // Need this extra db call since the response.data in the put route doesn't populate the user field with an
       // object containing id, and username, only the get route does that.
-      // so this adds a blog object without those files and we can't compare user.username to blog.user.username
+      // so this adds a blog object without those fields, and we can't compare user.username to blog.user.username
       // until we rerender after that updated state change - just annoying non-relational db stuff
+      setSuccessMessage(`a new blog ${returnedBlog.title}  added`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
       const returnedBlogs = await blogService.getAll()
       setBlogs(returnedBlogs)
     } else {
@@ -78,42 +83,6 @@ const App = () => {
     }
   }
 
-  const loginForm = () => (
-    <div>
-      <h1>
-        bl<span style={{ color: 'thistle' }}>o</span>gs
-      </h1>
-      <form onSubmit={handleLogin}>
-        <h3 style={{ marginTop: '2em' }}>blogs login</h3>
-        <Notification
-          errorMessage={errorMessage}
-          successMessage={successMessage}
-        />
-        <div className="form">
-          username
-          <input
-            type="text"
-            name="Username"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div className="form">
-          password
-          <input
-            type="password"
-            name="Password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button className="button login" type="submit">
-          submit
-        </button>
-      </form>
-    </div>
-  )
-
   const logout = () => {
     window.localStorage.removeItem('loggedBloglistAppUser')
     setUser(null)
@@ -122,14 +91,10 @@ const App = () => {
   const blogForm = () => (
     <Togglable
       buttonLabel="new blog"
-      cancelButtonLabel="cancel"
       ref={blogFormRef}
+      cancelButtonLabel="cancel"
     >
-      <BlogForm
-        createBlog={addBlog}
-        setSuccessMessage={setSuccessMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      <BlogForm createBlog={addBlog} />
     </Togglable>
   )
 
@@ -171,7 +136,23 @@ const App = () => {
     </div>
   )
 
-  return <div>{!user ? loginForm() : <BlogList />}</div>
+  return (
+    <div>
+      {!user ? (
+        <LoginForm
+          handleSubmit={handleLogin}
+          successMessage={successMessage}
+          errorMessage={errorMessage}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+        />
+      ) : (
+        <BlogList />
+      )}
+    </div>
+  )
 }
 
 export default App

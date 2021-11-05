@@ -20,9 +20,7 @@ describe('<BlogDetails />', () => {
     }
   })
 
-  // NB I changed this test to fire only once, the way this is handled in
-  // the app is the button is 'disabled' after a user likes a particular blog
-  // to discoourage vote spamming
+  // Change this test to fire once if disabling button after click in BlogDetails state
   test('<BlogDetails /> if like button is clicked, associated event handler is called', () => {
     const mockHandler = jest.fn()
     const component = render(
@@ -33,8 +31,7 @@ describe('<BlogDetails />', () => {
     console.log(prettyDOM(div))
     const button = component.getByText('like')
     fireEvent.click(button)
-    // fireEvent.click(button)
-    // expect(mockHandler.mock.calls).toHaveLength(2)
-    expect(mockHandler.mock.calls).toHaveLength(1)
+    fireEvent.click(button)
+    expect(mockHandler.mock.calls).toHaveLength(2)
   })
 })
