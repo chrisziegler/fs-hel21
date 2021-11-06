@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
@@ -75,7 +75,7 @@ const App = () => {
       setBlogs(returnedBlogs)
     } else {
       setErrorMessage(
-        ` title, author url required with minimum length of 5 characters each`,
+        ' title, author url required with minimum length of 5 characters each',
       )
       setTimeout(() => {
         setErrorMessage(null)

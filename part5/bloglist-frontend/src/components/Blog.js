@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import * as blogService from '../services/blogs'
 import BlogDetails from './BlogDetails'
 
@@ -31,7 +31,7 @@ const Blog = ({ blog, setBlogs, user, setSuccessMessage }) => {
       // )
       // setBlogs(removeUpdated.concat(updatedBlog))
     } else {
-      console.log("something went wrong with adding a 'like'")
+      console.log('something went wrong with adding a "like"')
       return
     }
   }
