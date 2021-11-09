@@ -21,3 +21,5 @@ yarn-error.log*
 
 practice.js
 practice2.js
+
+cypress/videos/
