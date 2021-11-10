@@ -16,7 +16,7 @@ describe('Blog app', function () {
     cy.contains('blogs login')
   })
   describe('Login', function () {
-    it('succeeds with the right credentials', function () {
+    it('Succeeds with the right credentials', function () {
       cy.visit('http://localhost:3000')
       cy.get('#username').type('admin')
       cy.get('#password').type('hunter2')
@@ -49,9 +49,10 @@ describe('Blog app', function () {
       cy.get('#submit-blog').click()
       cy.get('.success').should('contain', 'JavaScript: The Good Parts')
       cy.get('.success').should('have.css', 'color', 'rgb(0, 128, 0)')
+      // added to the list of all blogs
       cy.contains('JavaScript: The Good Parts | Douglas Crockford')
     })
-    describe.only('Blogs', function () {
+    describe('Blogs', function () {
       beforeEach(function () {
         cy.createBlog({
           title: 'In Cold Blood',
@@ -60,21 +61,21 @@ describe('Blog app', function () {
           likes: 0,
         })
       })
-      it.skip('Can be liked by users', function () {
+      it('Can be liked by users', function () {
         cy.contains('In Cold Blood | Truman Capote')
         cy.contains('view').click()
         cy.contains('likes: 0')
         cy.get('#like').click()
         cy.contains('likes: 1')
       })
-      it.skip('Can be deleted by user who created it', function () {
+      it('Can be deleted by user who created it', function () {
         cy.contains('view').click()
         cy.contains('delete').click()
         cy.on('window:confirm', () => true)
         cy.visit('http://localhost:3000')
         cy.get('html').should('not.contain', 'In Cold Blood')
       })
-      it.skip('Cannot be deleted by other users', function () {
+      it('Cannot be deleted by other users', function () {
         cy.contains('logout').click()
         const user = {
           name: 'New User',
@@ -105,13 +106,26 @@ describe('Blog app', function () {
         cy.contains('view').click()
         cy.contains('view').click()
         cy.contains('view').click()
-        cy.get('ul').then(items =>
-          items.map((i, el) => {
-            for (let prop in el) {
-              console.log(el[prop])
+
+        cy.get('[data-cy=likes]').then(items =>
+          items.map((i, item) => {
+            if (i === 0) {
+              expect(item.innerText).to.contain('likes: 100')
+            }
+            if (i === 1) {
+              expect(item.innerText).to.contain('likes: 50')
+            }
+            if (i === 2) {
+              expect(item.innerText).to.contain('likes: 0')
             }
           }),
         )
+
+        // items.map((i, span) => {
+        //   blogsList.concat(span.innerText)
+        // }),
+
+        // console.log(blogsList[0])
       })
     })
   })

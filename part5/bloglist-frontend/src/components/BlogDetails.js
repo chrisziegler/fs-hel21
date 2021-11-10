@@ -43,7 +43,7 @@ const BlogDetails = ({
           <a href={blog.url}>{blog.url}</a>
         </li>
         <li style={liStyle}>
-          likes:&nbsp; {likes}{' '}
+          <span data-cy="likes"> likes: {likes} </span>
           <button
             id="like"
             className="like"
