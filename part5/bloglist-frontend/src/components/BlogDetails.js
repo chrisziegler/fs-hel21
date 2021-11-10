@@ -28,7 +28,7 @@ const BlogDetails = ({
   }
 
   return (
-    <div className="fullDetails">
+    <div data-cy-fulldetail="true">
       <ul style={detailStyle}>
         <hr />
         <li style={liStyle}>
@@ -45,6 +45,7 @@ const BlogDetails = ({
         <li style={liStyle}>
           likes:&nbsp; {likes}{' '}
           <button
+            id="like"
             className="like"
             // disabled={disable}
             onClick={event => handleBlogLikes(event, blog)}

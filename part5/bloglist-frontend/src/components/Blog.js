@@ -7,7 +7,7 @@ const Blog = ({ blog, setBlogs, user, setSuccessMessage }) => {
 
   const blogSummary = () => {
     return (
-      <div>
+      <div className="blogSummary">
         {blog.title}
         <span style={{ color: 'white' }}> | </span>
         {blog.author}{' '}
