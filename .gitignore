@@ -22,5 +22,5 @@ yarn-error.log*
 practice.js
 practice2.js
 
-cypress/videos/
-part5/blogslist-frontend/cypress/videos/
+blog_app.spec.js.mp4
+.mp4
