@@ -69,7 +69,6 @@ export const createAnecdote = content => {
     type: 'NEW_ANECDOTE',
     data: {
       ...content,
-      votes: 0,
     },
   }
 }
