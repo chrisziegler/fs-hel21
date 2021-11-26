@@ -7,9 +7,9 @@ import {
 
 const AnecdoteList = ({ anecdote }) => {
   const dispatch = useDispatch()
-  const vote = ({ id, content }) => {
-    dispatch(addVote(id))
-    dispatch(sendNotification('you voted ' + content))
+  const vote = anecdote => {
+    dispatch(addVote(anecdote))
+    dispatch(sendNotification('you voted ' + anecdote.content))
     setTimeout(() => {
       dispatch(removeNotification())
     }, 5000)

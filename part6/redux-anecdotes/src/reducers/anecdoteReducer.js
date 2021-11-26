@@ -14,8 +14,7 @@ const reducer = (state = [], action) => {
         anectdote => anectdote.id === id,
       )
       const changedAnecdote = {
-        ...anectdoteToChange,
-        votes: (anectdoteToChange.votes += 1),
+        ...action.data,
       }
       return state.map(anecdote =>
         anecdote.id !== id ? anecdote : changedAnecdote,
@@ -35,10 +34,19 @@ export const initializeAnecdotes = () => {
   }
 }
 
-export const addVote = id => {
-  return {
-    type: 'ADD_VOTE',
-    data: { id },
+export const addVote = anecdote => {
+  return async dispatch => {
+    const updateWithVote = {
+      ...anecdote,
+      votes: (anecdote.votes += 1),
+    }
+    const updatedAnecdote = await anecdoteServices.updateVote(
+      updateWithVote,
+    )
+    dispatch({
+      type: 'ADD_VOTE',
+      data: updatedAnecdote,
+    })
   }
 }
 
