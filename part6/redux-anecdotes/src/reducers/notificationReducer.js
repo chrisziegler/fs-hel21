@@ -5,16 +5,24 @@ const notificationReducer = (state = initialState, action) => {
     case 'SEND_NOTIFICATION':
       return { ...state, message: action.data }
     case 'REMOVE_NOTIFICATION':
-      return null
+      return action.data
     default:
       return state
   }
 }
 
-export const sendNotification = message => {
-  return {
-    type: 'SEND_NOTIFICATION',
-    data: message,
+export const sendNotification = (message, time) => {
+  return async dispatch => {
+    dispatch({
+      type: 'SEND_NOTIFICATION',
+      data: message,
+    })
+    setTimeout(() => {
+      dispatch({
+        type: 'REOMOVE_NOTIFICATION',
+        data: null,
+      })
+    }, time)
   }
 }
 

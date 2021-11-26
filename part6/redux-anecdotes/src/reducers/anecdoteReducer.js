@@ -10,9 +10,6 @@ const reducer = (state = [], action) => {
       return [...state, action.data]
     case 'ADD_VOTE':
       const id = action.data.id
-      const anectdoteToChange = state.find(
-        anectdote => anectdote.id === id,
-      )
       const changedAnecdote = {
         ...action.data,
       }
