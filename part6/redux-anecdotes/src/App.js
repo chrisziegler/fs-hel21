@@ -25,12 +25,11 @@ const App = () => {
         .includes(filteredResults.toLowerCase()),
     )
   }
-  const notification = useSelector(state => state.notifications)
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      <Notification notification={notification} />
+      <Notification />
       <Filter />
       {anecdotes.map(anecdote => (
         <AnecdoteList anecdote={anecdote} key={anecdote.id} />
