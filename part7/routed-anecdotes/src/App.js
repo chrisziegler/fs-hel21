@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { Link, Routes, Route, useMatch } from 'react-router-dom'
+import {
+  Link,
+  Routes,
+  Route,
+  useMatch,
+  useNavigate,
+} from 'react-router-dom'
 
 const Menu = () => {
   const padding = {
@@ -34,7 +40,11 @@ const AnecdoteList = ({ anecdotes }) => (
 )
 
 const AnecdoteView = ({ anecdote }) => {
-  return <h2>{anecdote.content}</h2>
+  return (
+    <h2>
+      {anecdote.content} by {anecdote.author}
+    </h2>
+  )
 }
 
 const About = () => (
@@ -61,7 +71,7 @@ const About = () => (
 )
 
 const Footer = () => (
-  <div>
+  <div style={{ marginTop: '1.5rem' }}>
     Anecdote app for{' '}
     <a href="https://courses.helsinki.fi/fi/tkt21009">
       Full Stack -websovelluskehitys
@@ -78,6 +88,7 @@ const CreateNew = props => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
+  const navigate = useNavigate()
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -87,6 +98,12 @@ const CreateNew = props => {
       info,
       votes: 0,
     })
+
+    navigate('/')
+    props.setNotification(`a new anecdote ${content} created`)
+    setTimeout(() => {
+      props.setNotification(null)
+    }, 10000)
   }
 
   return (
@@ -146,7 +163,7 @@ const App = () => {
     ? anecdotes.find(anecdote => anecdote.id === match.params.id)
     : null
 
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState(null)
 
   const addNew = anecdote => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
@@ -165,11 +182,13 @@ const App = () => {
 
     setAnecdotes(anecdotes.map(a => (a.id === id ? voted : a)))
   }
+  console.log(vote)
 
   return (
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      {notification && <p>{notification}</p>}
       <Routes>
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route
@@ -177,7 +196,12 @@ const App = () => {
           element={<AnecdoteView anecdote={anecdote} />}
         />
 
-        <Route path="/create" element={<CreateNew />} />
+        <Route
+          path="/create"
+          element={
+            <CreateNew addNew={addNew} setNotification={setNotification} />
+          }
+        />
         <Route path="/about" element={<About />} />
       </Routes>
       <Footer />
