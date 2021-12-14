@@ -22,10 +22,12 @@ const useCountry = name => {
   const [country, setCountry] = useState(null)
 
   useEffect(() => {
-    axios.get(`${baseUrl}/${name}?fullText=true`).then(response => {
-      setCountry(response.data)
-      console.log(response.data)
-    })
+    axios
+      .get(`${baseUrl}/${name}?fullText=true`)
+      .then(response => {
+        setCountry(response.data)
+      })
+      .catch(err => console.log(err.message))
   }, [name])
 
   return country
@@ -35,7 +37,6 @@ const Country = ({ country }) => {
   if (!country) {
     return null
   }
-
   if (country.message === 'Not Found') {
     return <div>not found...</div>
   }
